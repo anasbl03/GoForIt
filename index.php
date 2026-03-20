@@ -1,10 +1,13 @@
-<?php include("includes/header.php"); ?>
+<?php 
+require("includes/db.php");
+include("includes/header.php"); 
+?>
 
 <header class="bg-primary text-white text-center p-5">
     <div class="container">
         <h1>Rejoins des défis sportifs 🔥</h1>
         <p>Teste tes limites, progresse et compare-toi aux autres !</p>
-        <a href="#" class="btn btn-light btn-lg">Voir les défis</a>
+        <a href="register.php" class="btn btn-light btn-lg">Rejoins la communauté</a>
     </div>
 </header>
 
@@ -82,7 +85,6 @@
     </div>
 
 </div>
-
 
 
 

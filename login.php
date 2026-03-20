@@ -1,18 +1,18 @@
-<?php include("includes/header.php"); ?>
 <?php 
 require("includes/db.php"); 
+include("includes/header.php"); 
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    $username=$_POST["username"];
+    $email=$_POST["email"];
     $password=$_POST["password"];
 
-    $sql = "SELECT * FROM users WHERE username = ?";
+    $sql = "SELECT * FROM users WHERE email = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$username]);
+    $stmt->execute([$email]);
 
     $user = $stmt->fetch();
 
     if ($user) {
-    
         if (password_verify($password, $user["password"])) {
             echo "Connexion réussie !";
         } else {
@@ -24,9 +24,23 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 
 }
 ?>
-<form method=POST>
-    Nom d'utilisateur<input type="text" name="username">
-    Mot de passe<input type="password" name="password">
-    <button type="submit">Se connecter</button>
-</form>
+<div class="container mt-5 d-flex justify-content-center">
+
+  <form method="POST" style="width: 400px;">
+
+    <div>
+        <label>Nom d'utilisateur</label><br>
+        <input type="text" name="email" value="<?php echo isset($name) ? htmlspecialchars($username) : ''; ?>">
+    </div>
+    <div>
+        <label>Mot de passe</label><br>
+        <input type="password" name="password">
+    </div>
+    <div>
+        <button type="submit">Se connecter</button>
+    </div>
+  </form>
+
+</div>
+
 <?php include("includes/footer.php"); ?>

@@ -1,79 +1,82 @@
-<?php include("includes/header.php"); ?>
-
 <?php
 require("includes/db.php");
+include("includes/header.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = $_POST["password"];
-    $username = $_POST["username"];
+    $passwordConfirm= $_POST["passwordConfirm"];
 
+    if (empty($name)|| empty($email)|| empty($password)||empty($passwordConfirm)){
+      echo "<div class='alert alert-danger'>Veuillez remplir tous les champs</div>";
+    } elseif ($password !== $passwordConfirm) {
+      echo "<div class='alert alert-danger'>Les mots de passe ne correspondent pas</div>";
+    } elseif (strlen($password) < 6){
+      echo "<div class='alert alert-danger'> Le mot de passe doit contenir au moins 6 caractères.</div>";
+    } elseif (!preg_match('/[A-Z]/', $password)) {
+      echo "<div class='alert alert-danger'> Le mot de passe doit contenir au moins une majuscule.</div>";
+    } elseif (!preg_match('/[a-z]/', $password)) {
+      echo "<div class='alert alert-danger'> Le mot de passe doit contenir au moins une minuscule.</div>";
+    } elseif (!preg_match('/[0-9]/', $password)) {
+      echo "<div class='alert alert-danger'> Le mot de passe doit contenir au moins un chiffre.</div>";
+    }else {
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$email]);
 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        if ($stmt->rowCount() > 0) {
+            echo "<div class='alert alert-danger'>Email déjà utilisé</div>";
+        
+        } else {
 
+          
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (name, email, password, username) VALUES (?, ?, ?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$name, $email, $hashedPassword, $username]);
+            $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$name, $email, $hashedPassword]);
 
-    echo "<div class='alert alert-success'>Inscription réussie !</div>";
+            echo "<div class='alert alert-success'>Inscription réussie !</div>";
+        }
+    }
 }
 ?>
 
-<form method="POST" action="">
-    <form class="row g-3 needs-validation" novalidate>
-        <div class="col-md-4">
-            <label for="validationCustom01" class="form-label">Nom</label>
-            <input type="text" class="form-control" id="validationCustom01" name="name" required>
-            <div class="valid-feedback">Looks good!</div>
-        </div>
+<div class="container mt-5 d-flex justify-content-center">
 
-  <div class="col-md-4">
-    <label for="validationCustom02" class="form-label">Email</label>
-    <input type="text" class="form-control" id="validationCustom02"  name="email" required>
-    <div class="valid-feedback">
-      Looks good!
+  <form method="POST" style="width: 400px;">
+    
+    <div class="mb-3">
+      <label class="form-label">Nom</label>
+      <input type="text" class="form-control" name="name" required>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <label for="validationCustomUsername" class="form-label">Username</label>
-    <div class="input-group has-validation">
-      <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="username" required>
-      <div class="invalid-feedback">
-        Please choose a username.
-      </div>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" name="email" required>
     </div>
-  </div>
 
-  <div class="col-md-6">
-    <label for="validationCustom03" class="form-label">Mot de passe</label>
-    <input type="text" class="form-control" id="validationCustom03" name="password" required>
-    <div class="invalid-feedback">
-      Entrez un mot de passe valide.
+    <div class="mb-3">
+      <label class="form-label">Mot de passe</label>
+      <input type="password" class="form-control" name="password" required>
     </div>
-  </div>
 
- 
-  <div class="col-12">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-      <label class="form-check-label" for="invalidCheck">
-        Agree to terms and conditions
-      </label>
-      <div class="invalid-feedback">
-        You must agree before submitting.
-      </div>
+    <div class="mb-3">
+      <label>Confirmer mot de passe</label>
+      <input type="password" class="form-control" name="passwordConfirm" required>
     </div>
-  </div>
 
-  <div class="col-12">
-    <button class="btn btn-primary" type="submit">S'inscrire</button>
-  </div>
-    </form>
-</form>
+    <button class="btn btn-primary w-100" type="submit">
+      S'inscrire
+    </button>
+
+    <a href="login.php">Déjà un compte ?</a>
+
+  </form>
+
+</div>
 
 
 <?php include("includes/footer.php"); ?>

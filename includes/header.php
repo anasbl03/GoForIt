@@ -24,7 +24,6 @@
                 <li class="nav-item"><a class="nav-link" href="classement.php">Classement</a></li>
                 <li class="nav-item"><a class="nav-link" href="communaute.php">Communauté</a></li>
                 <li class="nav-item"><a class="nav-link" href="login.php">Connexion</a></li>
-                <li class="nav-item"><a class="nav-link" href="register.php">Inscription</a></li>
             </ul>
 
             <form class="d-flex ms-3" role="search">
