@@ -1,3 +1,9 @@
+<?php
+session_start();
+require(__DIR__ . "/db.php");
+require(__DIR__ . "/config.php");
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,31 +12,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg custom-navbar" data-bs-theme="light">
     <div class="container">
 
-        <a class="navbar-brand" >🏆 Défis Sportifs</a>
-
+        <a class="navbar-brand">🏆 Défis Sportifs</a>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="menu">
-
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.php">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="defis.php">Défis</a></li>
-                <li class="nav-item"><a class="nav-link" href="classement.php">Classement</a></li>
-                <li class="nav-item"><a class="nav-link" href="communaute.php">Communauté</a></li>
-                <li class="nav-item"><a class="nav-link" href="login.php">Connexion</a></li>
-            </ul>
 
-            <form class="d-flex ms-3" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
+    <li class="nav-item">
+        <a class="nav-link" href="<?= BASE_URL ?>index.php">Accueil</a>
+    </li>
 
+    <li class="nav-item">
+        <a class="nav-link" href="<?= BASE_URL ?>defis.php">Défis</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="<?= BASE_URL ?>classement.php">Classement</a>
+    </li>
+
+    <?php if (!empty($_SESSION['user_id'])): ?>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo BASE_URL; ?>pages/profil.php">Mon profil</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/ProjetWeb2526/actions/logout.php">Déconnexion</a>
+        </li>
+
+    <?php else: ?>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?= BASE_URL ?>login.php">Connexion</a>
+        </li>
+
+    <?php endif; ?>
+
+</ul>
         </div>
     </div>
 </nav>

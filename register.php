@@ -27,54 +27,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$email]);
 
         if ($stmt->rowCount() > 0) {
-            echo "<div class='alert alert-danger'>Email déjà utilisé</div>";
-        
+            echo "<div class='alert alert-danger'>Email déjà utilisé</div>";        
         } else {
-
-          
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$name, $email, $hashedPassword]);
 
-            echo "<div class='alert alert-success'>Inscription réussie !</div>";
+            echo "<div class='alert alert-success'>Inscription réussie ! Redirection dans 2 secondes...</div>";
+            echo "<meta http-equiv='refresh' content='2;url=login.php'>";
         }
     }
 }
 ?>
 
-<div class="container mt-5 d-flex justify-content-center">
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
 
-  <form method="POST" style="width: 400px;">
+  <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
     
-    <div class="mb-3">
-      <label class="form-label">Nom</label>
-      <input type="text" class="form-control" name="name" required>
+    <div class="text-center mb-4">
+      <h3 class="fw-bold">Créer un compte</h3>
+      <p class="text-muted">Inscris-toi pour commencer</p>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input type="email" class="form-control" name="email" required>
-    </div>
+    <form method="POST">
 
-    <div class="mb-3">
-      <label class="form-label">Mot de passe</label>
-      <input type="password" class="form-control" name="password" required>
-    </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="name" value="<?= htmlspecialchars($_POST['name'] ?? '') ?>" placeholder="Nom" required>
+        <label>Nom</label>
+      </div>
 
-    <div class="mb-3">
-      <label>Confirmer mot de passe</label>
-      <input type="password" class="form-control" name="passwordConfirm" required>
-    </div>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" name="email" placeholder="Email" required>
+        <label>Email</label>
+      </div>
 
-    <button class="btn btn-primary w-100" type="submit">
-      S'inscrire
-    </button>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Mot de passe" required>
+        <label>Mot de passe</label>
+      </div>
 
-    <a href="login.php">Déjà un compte ?</a>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" name="passwordConfirm" placeholder="Confirmer" required>
+        <label>Confirmer mot de passe</label>
+      </div>
 
-  </form>
+      <button class="btn btn-primary w-100 py-2 mb-3" type="submit">
+        S'inscrire
+      </button>
+
+      <div class="text-center">
+        <a href="login.php" class="text-decoration-none">
+          Déjà un compte ? Se connecter
+        </a>
+      </div>
+
+    </form>
+
+  </div>
 
 </div>
 
